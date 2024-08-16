@@ -1,7 +1,7 @@
 # Mabe
 
 ## arch1t3cht's Aegisub "fork"
-Download release builds [here](https://github.com/arch1t3cht/Aegisub/releases), or the latest CI builds [here](https://github.com/arch1t3cht/Aegisub/actions).
+Download release builds [here](https://github.com/arch1t3cht/Aegisub/releases), or the latest CI builds [here](https://github.com/arch1t3cht/Aegisub/actions?query=branch%3Afeature+event%3Apush).
 
 The release page also has detailed list of all changes and new features. If you're interested in the technical details or want to compile yourself, read on.
 
@@ -92,14 +92,14 @@ To change the options of an existing build directory, run `meson setup --reconfi
 
 ### Dependencies
 Apart from the dependencies for the TSTools version, there are some additional dependencies. These are cloned and compiled from scratch if not found, but you might want to install binaries instead:
-- `jansson`: For BestSource
+- `xxhash`: For BestSource
 - `ffmpeg`: Becomes a direct dependency when compiling with BestSource
-- `avisynth` (or `avisynthplus`): Optional run-time dependency for the Avisynth source
-- `vapoursynth`: Optional run-time dependency for the VapourSynth source
+- `avisynth` (or `avisynthplus`): Optional run-time dependency for the Avisynth audio/video provider
+- `vapoursynth`: Optional run-time dependency for the VapourSynth audio/video provider
 
    The following VapourSynth plugins are used by the default scripts set in the default configuration:
-   - [`lsmas`](https://github.com/AkarinVS/L-SMASH-Works): For LWLibavSource
-   - [`bas`](https://github.com/vapoursynth/bestaudiosource): For BestAudioSource
+   - [`lsmas`](https://github.com/HomeOfAviSynthPlusEvolution/L-SMASH-Works): For LWLibavSource
+   - [`bs`](https://github.com/vapoursynth/bestsource): For BestSource, used for audio
    - [`wwxd`](https://github.com/dubhater/vapoursynth-wwxd) and [`scxvid`](https://github.com/dubhater/vapoursynth-scxvid) (depending on settings): For keyframe generation
 
 

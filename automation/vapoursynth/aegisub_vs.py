@@ -187,10 +187,7 @@ def wrap_lwlibavsource(filename: str, cachedir: str | None = None, **kwargs: Any
     if cachedir is None:
         cachedir = aegi_vscache
 
-    try:
-        os.mkdir(cachedir)
-    except FileExistsError:
-        pass
+    os.makedirs(cachedir, exist_ok=True)
     cachefile = os.path.join(cachedir, make_lwi_cache_filename(filename))
 
     progress_set_message("Loading video file")
@@ -198,7 +195,8 @@ def wrap_lwlibavsource(filename: str, cachedir: str | None = None, **kwargs: Any
 
     ensure_plugin("lsmas", "libvslsmashsource", "To use Aegisub's LWLibavSource wrapper, the `lsmas` plugin for VapourSynth must be installed")
 
-    if b"-Dcachedir" not in core.lsmas.Version()["config"]: # type: ignore
+    import inspect
+    if "cachedir" not in inspect.getfullargspec(vs.core.lsmas.LWLibavSource).args:
         raise vs.Error("To use Aegisub's LWLibavSource wrapper, the `lsmas` plugin must support the `cachedir` option for LWLibavSource.")
 
     clip = core.lsmas.LWLibavSource(source=filename, cachefile=cachefile, **kwargs)
@@ -239,7 +237,7 @@ def make_keyframes(clip: vs.VideoNode, use_scxvid: bool = False,
         nonlocal done
         keyframes[n] = f.props._SceneChangePrev if use_scxvid else f.props.Scenechange # type: ignore
         done += 1
-        if done % (clip.num_frames // 200) == 0:
+        if done % max(1, clip.num_frames // 200) == 0:
             progress_set_progress(100 * done / clip.num_frames)
         return f
 
@@ -311,15 +309,15 @@ def get_keyframes(filename: str, clip: vs.VideoNode, fallback: str | List[int],
 def check_audio(filename: str, **kwargs: Any) -> bool:
     """
     Checks whether the given file has an audio track by trying to open it with
-    BestAudioSource. Requires the `bas` plugin to return correct results, but
+    BestSource. Requires the `bs` plugin to return correct results, but
     won't crash if it's not installed.
-    Additional keyword arguments are passed on to BestAudioSource.
+    Additional keyword arguments are passed on to BestSource.
     """
     progress_set_message("Checking if the file has an audio track")
     progress_set_indeterminate()
     try:
-        ensure_plugin("bas", "BestAudioSource", "")
-        vs.core.bas.Source(source=filename, **kwargs)
+        ensure_plugin("bs", "BestSource", "")
+        vs.core.bs.AudioSource(source=filename, **kwargs)
         return True
     except AttributeError:
         pass
