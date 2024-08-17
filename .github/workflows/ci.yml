@@ -144,6 +144,7 @@ jobs:
 
       - name: Install dependencies (MacOS)
         if: startsWith(matrix.config.os, 'macos-')
+        continue-on-error: true
         run: |
           export HOMEBREW_NO_INSTALL_CLEANUP=1
           export HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1
